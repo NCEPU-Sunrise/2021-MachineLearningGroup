@@ -4,7 +4,7 @@ from linear_regression import BayesianLinearRegression
 import matplotlib.pyplot as plt
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
-np.random.seed(100)
+
 
 
 def load_data(path):
@@ -20,16 +20,14 @@ def load_data(path):
         line = list(map(float, line))
         dataset.append(line)
     dataset = np.array(dataset)
-    np.random.shuffle(dataset)
-    return dataset[:, 0], dataset[:, 1]
+    train = dataset[: 150]
+    np.random.shuffle(train)
+    test = dataset[150:]
+    return train[:, 0], train[:, 1], test[:, 0], test[:, 1]
 
 
 def main(path, alpha, beta):
-    data, label = load_data(path)
-    x_train = data[:150]
-    y_train = label[:150]
-    x_test = data[150:]
-    y_test = label[150:]
+    x_train, y_train, x_test, y_test = load_data(path)
     rbf = RBF(np.linspace(0, 1, 50), 0.1)
     X_train = rbf(x_train)
     X_test = rbf(x_test)
